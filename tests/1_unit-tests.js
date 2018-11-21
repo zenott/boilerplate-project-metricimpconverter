@@ -57,7 +57,7 @@ suite('Unit Tests', function(){
   suite('Function convertHandler.getUnit(input)', function() {
     
     test('For Each Valid Unit Inputs', function(done) {
-      var input = ['gal','l','mi','km','lbs','kg','GAL','L','MI','KM','LBS','KG'];
+      var input = ['gal','l','mi','km','lbs','kg'];
       input.forEach(function(ele) {
         assert.equal(convertHandler.getUnit(ele),ele);
       });
@@ -91,7 +91,7 @@ suite('Unit Tests', function(){
       var input = ['gal','l','mi','km','lbs','kg'];
       var expect = ['gallons','liters','miles','kilometers','pounds','kilograms'];
       input.forEach(function(ele, i) {
-        assert.equal(convertHandler.getReturnUnit(ele), expect[i]);
+        assert.equal(convertHandler.spellOutUnit(ele), expect[i]);
       });
       done();
     });

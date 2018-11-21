@@ -5,7 +5,7 @@
 *       
 *       
 */
-const units=['km','mi','lbs','kg','gal','l'];
+const units=[/(^|(?<=\d))km$/,/(^|(?<=\d))mi$/,/(^|(?<=\d))lbs$/,/(^|(?<=\d))kg$/,/(^|(?<=\d))gal$/,/(^|(?<=\d))l$/];
 const unitConv={
   mi: 'km',
   gal: 'l',
@@ -15,11 +15,11 @@ const unitConv={
   kg: 'lbs'
 }
 const unitSpell = {
-  gal: 'gallons ',
+  gal: 'gallons',
   l: 'liters',
-  mi: 'miles ',
+  mi: 'miles',
   km: 'kilometers',
-  lbs: 'pounds ',
+  lbs: 'pounds',
   kg: 'kilograms'
 };
 
@@ -28,18 +28,14 @@ function ConvertHandler() {
   this.getNum = function(input) {
     let result;
     let unitRes;
-    for(let unit of units){
-      if(input.indexOf(unit)!==-1){
-        unitRes=input.slice(input.indexOf(unit));
-        result=input.slice(0,input.indexOf(unit));
-        break;
-      }
-    }
-    if(!unitRes){
-      return 'invalid unit';
-    }
+    input=input.toLowerCase();
+    result=input.match(/^[0-9\.\/]*($|(?=\w+))/)[0];
+    
     if(result===''){
       return '1';
+    }
+    if(result.indexOf('/')!==0 && result.split('/').length===2){
+      result=result.split('/')[0] / result.split('/')[1];
     }
     if(!isNaN(result)){
       return result;
@@ -50,13 +46,14 @@ function ConvertHandler() {
   
   this.getUnit = function(input) {
     let result;
+    input=input.toLowerCase();
     for(let unit of units){
-      if(input.indexOf(unit)!==-1){
-        result=input.slice(input.indexOf(unit));
+      if(input.search(unit)!==-1){
+        result=input.slice(input.search(unit));
         break;
       }
     }
-    if(units.indexOf(result)!==-1){
+    if(result){
       return result;
     } else{
       return 'invalid unit';
@@ -78,6 +75,7 @@ function ConvertHandler() {
     const lbsToKg = 0.453592;
     const miToKm = 1.60934;
     let result;
+    initUnit=initUnit.toLowerCase();
     switch (initUnit){
       case 'kg':
         result=initNum/lbsToKg;
